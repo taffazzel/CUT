@@ -31,6 +31,7 @@ if __name__ == '__main__':
 	auth.set_access_token(access_token, access_token_secret)
 	print "AUTH READY"
 	stream = Stream(auth, w)
+	print "stream", stream
 	print w.track
 	while True:
 		try:
