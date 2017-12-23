@@ -13,7 +13,7 @@ class WriteTopic(StreamListener):
 	def __init__(self):
 		self.topic = "testTopic2"
 		self.producer = KafkaProducer(bootstrap_servers=['localhost:6667'])
-		self.track = "the to and is in it you of for on my".split()
+		self.track = "Donald Trump"
 	
 	def on_data(self,data):
 		self.producer.send(topic,data.encode('utf-8'))
@@ -34,8 +34,9 @@ if __name__ == '__main__':
 	print w.track
 	while True:
 		try:
-			t = stream.filter(languages = ["en"],track = self.track)
+			t = stream.filter(languages = ["en"],track = w.track)
 			print t
+			w.on_data(t)
 			print "test"
 		except:
 			pass
