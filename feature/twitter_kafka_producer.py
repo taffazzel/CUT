@@ -1,4 +1,4 @@
-from kafka import SimpleProducer, KafkaClient,KafkaProducer
+rom kafka import SimpleProducer, KafkaClient,KafkaProducer
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
