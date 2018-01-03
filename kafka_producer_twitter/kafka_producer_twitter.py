@@ -20,7 +20,6 @@ producer = confluent_kafka.Producer(**conf)
 
 class TweetStreamListener(StreamListener):
     def __init__(self,api):
-        print ( "In init")
         self.api = api
         super(StreamListener, self).__init__()
 
@@ -28,7 +27,6 @@ class TweetStreamListener(StreamListener):
         """
         This is called when new data arrives as live stream
         """
-        print ( "In on_status")
         text = status.text.encode('utf-8')
         print ("The data : ",str(text))
         try:
@@ -53,6 +51,5 @@ if __name__ == '__main__':
 
     stream = Stream(auth, listener=TweetStreamListener(api))
     stream.filter(track=['news'],languages=["en"])
-    #stream.sample()
 
 
