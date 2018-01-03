@@ -19,14 +19,10 @@ producer = confluent_kafka.Producer(**conf)
 
 
 class TweetStreamListener(StreamListener):
-    #def __init__(self,api):
-        #print ( "In init")
-        #self.api = api
-        #super(StreamListener, self).__init__()
-        #conf = {'bootstrap.servers': bootstrap_servers}
-        #producer = confluent_kafka.Producer(**conf)
-        #client = KafkaClient("localhost:6667")
-        #self.producer = KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('utf-8'))
+    def __init__(self,api):
+        print ( "In init")
+        self.api = api
+        super(StreamListener, self).__init__()
 
     def on_status(self, status):
         """
@@ -34,7 +30,6 @@ class TweetStreamListener(StreamListener):
         """
         print ( "In on_status")
         text = status.text.encode('utf-8')
-        #text = json.loads(status)['text'].encode('utf-8')
         print ("The data : ",str(text))
         try:
             producer.produce(topic, value=text)
@@ -56,10 +51,8 @@ if __name__ == '__main__':
     auth.set_access_token(access_token, access_token_secret)
     api = API(auth)
 
-    #stream = Stream(auth, listener=TweetStreamListener(api))
-    listener = TweetStreamListener()
-    stream = Stream(auth, listener)
-    #stream.filter(track=['news'],languages=["en"])
-    stream.sample()
+    stream = Stream(auth, listener=TweetStreamListener(api))
+    stream.filter(track=['news'],languages=["en"])
+    #stream.sample()
 
 
