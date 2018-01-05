@@ -6,6 +6,7 @@ import tweepy
 from tweepy import OAuthHandler, Stream, API
 from tweepy.streaming import StreamListener
 import twitter_config
+from utils import tweet_handles
 
 consumer_key = twitter_config.consumer_key
 consumer_secret = twitter_config.consumer_secret
@@ -50,6 +51,10 @@ if __name__ == '__main__':
     api = API(auth)
 
     stream = Stream(auth, listener=TweetStreamListener(api))
-    stream.filter(track=['news'],languages=["en"])
+    all_handles = []
+    for handle in tweet_handles.keys():
+        all_handles.extend(handle)
+
+    stream.filter(track=all_handles,languages=["en"])
 
 
