@@ -10,7 +10,7 @@ from pyspark.streaming.kafka import KafkaUtils
 #    json parsing
 import json  
 from pyspark.conf import SparkConf
-
+#from elasticsearch import Elasticsearch
 
 if __name__=='__main__':
 	topic = b'CUT'
@@ -22,10 +22,14 @@ if __name__=='__main__':
 	parsed = directKafkaStream.map(lambda v:json.loads(v[1]))
 	#wcount = parsed.flatMap(lambda line: line.split(" ")).map(lambda w:(w,1)).reduceByKey(lambda a,b:a+b)
 	#parsed.map(lambda tweet: tweet.keys()).pprint()
-	#p = parsed.filter(lambda s:len(s)>2).map(lambda tweet: tweet['text'])
-	parsed.filter(lambda s:len(s)>2).map(lambda tweet: tweet['text'].encode('utf-8')).pprint()
-	#p.pprint()
-	#parsed.pprint()
+	#parsed.filter(lambda s:len(s)>2).map(lambda tweet: tweet).pprint()
+	
+	text = parsed.filter(lambda s:len(s)>2).map(lambda tweet: tweet['text'].encode('utf-8'))
+	user = parsed.filter(lambda s:len(s)>2).map(lambda tweet: tweet['user']['screen_name'])
+	text.pprint()
+	es_conf = {"es.nodes" : "elk1.shinigami.com","es.port" : "9200","es.nodes.client.only" : "true","es.resource" : "cut/type"}
+	#text.flatMap(lambda s: s.split(" ")).map(lambda w:(w,1)).reduceByKey(lambda x,y:x+y).pprint()
+	user.pprint()	
 	parsed.count().map(lambda x:'Tweets in this batch: %s' % x).pprint()
 	ssc.start()  
 	ssc.awaitTermination() 
